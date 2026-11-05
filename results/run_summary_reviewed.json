@@ -1,0 +1,16 @@
+{
+  "selected_filings": 100,
+  "successful_filings": 99,
+  "filings_with_products": 15,
+  "product_rows": 80,
+  "rejected_candidates": 191,
+  "model": "gpt-5-mini",
+  "input_tokens": 506861,
+  "output_tokens": 41854,
+  "raw_candidate_rows": 80,
+  "reviewed_product_rows": 62,
+  "excluded_in_review": 18,
+  "reviewed_filings_with_products": 13,
+  "review_basis": "Supplied evidence quotes; source pages were not independently re-downloaded during review.",
+  "failed_filing": "0001628280-26-063820 (TSLA): ValidationError"
+}
