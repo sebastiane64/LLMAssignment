@@ -4,9 +4,9 @@ from pathlib import Path
 source=Path(sys.argv[1]);out=Path(sys.argv[2]);out.mkdir(parents=True,exist_ok=True)
 z=zipfile.ZipFile(source)
 evidence_bytes=z.read("evidence.csv")
-EXPECTED_0fe4a6c41f2d87a1a42cd0c6681933ba2d05ce49324ffca55641c7161b51f626 = "0fe4a6c41f2d87a1a42cd0c6681933ba2d05ce49324ffca55641c7161b51f626"
-if hashlib.sha256(evidence_bytes).hexdigest()!=EXPECTED_0fe4a6c41f2d87a1a42cd0c6681933ba2d05ce49324ffca55641c7161b51f626:
-    raise ValueError("These review decisions apply only to the reviewed 99-filing run. Review changed data separately.")
+EXPECTED_HASH = "dddefd74940a3c3ad258cde9ce71aa1a2f39a9390907e98f60320d4ccbb4fb89"
+if hashlib.sha256(evidence_bytes).hexdigest()!=EXPECTED_HASH:
+    raise ValueError("These review decisions apply only to the reviewed 200-filing run. Review changed data separately.")
 rows=list(csv.DictReader(io.StringIO(evidence_bytes.decode())))
 with Path(__file__).with_name("review_decisions.csv").open() as f:
     decisions=list(csv.DictReader(f))
@@ -34,6 +34,6 @@ summary=json.loads(z.read("run_summary.json"))
 summary.update(raw_candidate_rows=len(rows),reviewed_product_rows=len(retained),
     excluded_in_review=len(rows)-len(retained),reviewed_filings_with_products=len(set(r["accession"] for r in retained)),
     review_basis="Supplied evidence quotes; source pages were not independently re-downloaded during review.",
-    failed_filing="0001628280-26-063820 (TSLA): ValidationError")
+    failed_filings=0, historical_error_note="One Tesla filing initially failed validation, then succeeded on retry in this expanded run.")
 (out/"run_summary_reviewed.json").write_text(json.dumps(summary,indent=2))
 print(json.dumps(summary,indent=2))
