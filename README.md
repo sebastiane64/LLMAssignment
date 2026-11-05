@@ -13,10 +13,10 @@ Sebastian Esteban
 - [Review log](results/review_log.csv)
 - [Run summary](results/run_summary_reviewed.json)
 
-## Run in Colab
-Run cells in order. Step 2 requests a private API key through a hidden prompt and a contact email for the SEC User-Agent. The key must never be hardcoded or committed. Start with five filings; inspect results, then set RUN_LIMIT=100 and rerun the processing/export cells. Downloads and successful extractions are cached. The integrated quality rules run before Step 6; the standalone quality_patch.py is retained for the original working-session workflow.
+## Implementation
+The notebook runs in Google Colab with dependencies, private API configuration, SEC retrieval, sample selection, prompted NER, structured extraction, filing processing, and export. The default scope is 100 filings. Credentials are entered through a hidden runtime prompt; a contact email identifies SEC requests. Quality checks are integrated directly into extraction. Successful filing checkpoints and cached downloads support resuming interrupted runs.
 
-The notebook uses SEC submissions JSON metadata, BeautifulSoup parsing of primary filings and HTML/text EX-99 exhibits, prompted ORGANIZATION/PRODUCT named entity recognition, structured LLM outputs, quote checks, and a strict description length below 180 characters. PDF exhibits are excluded. Do not rerun quality_patch.py on an existing result folder unless intentionally archiving its checkpoints.
+HTML/text EX-99 exhibits are included; PDF exhibits are excluded. Description length is strictly below 180 characters. Evidence checks are followed by a separate, reproducible review of the recorded run.
 
 ## Reproduce the reviewed output
 Download the raw_results.zip provided in the submission bundle, then run:
@@ -27,4 +27,4 @@ python review_results.py raw_results.zip results
 
 The review script and review_decisions.csv apply only to the exact reviewed run. A hash check prevents accidental use on changed data. New runs require a fresh review. Repeat product announcements across separate filings remain separate records.
 
-The submitted source notebook has no embedded credentials and no invented execution outputs. The student's run artifacts provide the execution record. See the report for complete limitations. Add this repository URL to the top of your CV, as required by the assignment.
+The notebook contains no embedded credentials or fabricated cell outputs. Recorded run artifacts provide the execution record. The methodology report documents scope, review criteria, and limitations.
