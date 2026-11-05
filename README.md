@@ -1,15 +1,30 @@
 # SEC 8-K Product Announcement Extraction
 
-[Open in Google Colab](https://colab.research.google.com/github/sebastiane64/LLMAssignment/blob/main/SEC_8K_Colab.ipynb)
+Sebastian Esteban
 
-Run the notebook in order. Step 2 asks for an OpenAI API key through a hidden getpass input; never hardcode or commit it. API billing must be enabled separately. Enter a contact email for the SEC User-Agent.
+[Open notebook in Google Colab](https://colab.research.google.com/github/sebastiane64/LLMAssignment/blob/main/SEC_8K_Colab.ipynb)
 
-Start with five filings, inspect the evidence, then set RUN_LIMIT=100 and rerun Steps 6–8. Ten recent filings are selected per company across ten technology/automotive companies. The code uses SEC submissions JSON and BeautifulSoup, including EX-99 HTML/text exhibits. Explicit LLM-based ORGANIZATION/PRODUCT NER and announcement extraction use structured outputs. One row per verified product per filing is exported; filings without verified announcements remain in the audit file. Descriptions are strictly fewer than 180 characters. Successful filings are checkpointed.
+## Submitted results
+100 filings selected, 99 successfully processed; one Tesla filing failed validation. The raw LLM run generated 80 candidate rows; evidence-based review excluded 18 and retained **62 product records across 13 filings**. This is an assisted review of supplied quotes, not an independent verification of all source pages or an accuracy benchmark.
 
-Outputs: products.csv (five required columns), products_pipe.txt, evidence.csv, named_entities.csv, filing_audit.csv, run_summary.json, JSON checkpoints, and an optional error log. Failed filings are not counted as successful negatives. Download the ZIP before the Colab session ends. The notebook has not yet been run with the student's API credentials; actual results must come from execution.
+- [Final five-column CSV](results/products.csv)
+- [Methodology report](Methodology_Report.md)
+- [Evidence with source links](results/evidence_reviewed.csv)
+- [Review log](results/review_log.csv)
+- [Run summary](results/run_summary_reviewed.json)
 
-Limitations: purposive sample, possible SEC cloud-IP blocks, HTML/text exhibits only (PDF exhibits excluded), possible model errors and missed cross-chunk context. Exact quote checks support auditing but do not prove semantic correctness. Manually review source links and quotes. Product descriptions may be shortened to enforce the length limit. Repeated product announcements in different filings remain separate rows.
+## Run in Colab
+Run cells in order. Step 2 requests a private API key through a hidden prompt and a contact email for the SEC User-Agent. The key must never be hardcoded or committed. Start with five filings; inspect results, then set RUN_LIMIT=100 and rerun the processing/export cells. Downloads and successful extractions are cached. The integrated quality rules run before Step 6; the standalone quality_patch.py is retained for the original working-session workflow.
 
-The methodology report should use the actual run summary, describe manual validation honestly, and include this repository URL. Add the URL at the top of your CV as required by the assignment.
+The notebook uses SEC submissions JSON metadata, BeautifulSoup parsing of primary filings and HTML/text EX-99 exhibits, prompted ORGANIZATION/PRODUCT named entity recognition, structured LLM outputs, quote checks, and a strict description length below 180 characters. PDF exhibits are excluded. Do not rerun quality_patch.py on an existing result folder unless intentionally archiving its checkpoints.
 
-Sources: https://www.sec.gov/search-filings/edgar-application-programming-interfaces and https://developers.openai.com/api/docs/guides/structured-outputs
+## Reproduce the reviewed output
+Download the raw_results.zip provided in the submission bundle, then run:
+
+```sh
+python review_results.py raw_results.zip results
+```
+
+The review script and review_decisions.csv apply only to the exact reviewed run. A hash check prevents accidental use on changed data. New runs require a fresh review. Repeat product announcements across separate filings remain separate records.
+
+The submitted source notebook has no embedded credentials and no invented execution outputs. The student's run artifacts provide the execution record. See the report for complete limitations. Add this repository URL to the top of your CV, as required by the assignment.
